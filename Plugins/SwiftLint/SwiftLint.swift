@@ -56,21 +56,32 @@ private func makeCommand(
 ) throws -> PackagePlugin.Command {
     var arguments: [String] = ["lint"]
 
-    if FileManager.default.fileExists(atPath: root.appending(components: ".swiftlint.yml").path()) {
-        arguments.append(contentsOf: ["--config", root.appending(components: ".swiftlint.yml").path()])
+
+    if FileManager.default.fileExists(atPath: root.appending(components: ".swiftlint.yml").path(percentEncoded: false)) {
+        arguments.append(contentsOf: ["--config", root.appending(components: ".swiftlint.yml").path(percentEncoded: false)])
     }
 
     if ProcessInfo.processInfo.environment["CI"] == "TRUE" {
+        let ciConfigURL = pluginWorkDirectory.appending(path: ".ci.swiftlint.yml")
+
+        if !FileManager.default.fileExists(atPath: ciConfigURL.path(percentEncoded: false)) {
+            try """
+disabled_rules:
+  - todo
+""".write(to: ciConfigURL, atomically: true, encoding: .utf8)
+        }
+
+        arguments.append(contentsOf: ["--config", ciConfigURL.path(percentEncoded: false)])
         arguments.append("--no-cache")
         arguments.append("--strict")
     } else {
         arguments.append(contentsOf: [
             "--cache-path",
-            pluginWorkDirectory.appending(components: "cache").path()
+            pluginWorkDirectory.appending(components: "cache").path(percentEncoded: false)
         ])
     }
 
-    arguments.append(contentsOf: files.map { $0.path() })
+    arguments.append(contentsOf: files.map { $0.path(percentEncoded: false) })
 
     return .prebuildCommand(
         displayName: "SwiftLint",
