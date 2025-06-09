@@ -20,6 +20,8 @@ jobs:
           ./BuildPluginUpdater --version
 
       - name: Update SwiftLint
+        env:
+          DEVELOPER_DIR=/Applications/Xcode_16.2.app
         run: |
           VERSION=$(./BuildPluginUpdater . | jq .swiftlint)
 
