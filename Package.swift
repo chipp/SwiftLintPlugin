@@ -21,20 +21,20 @@ let package = Package(
             name: "SwiftLint",
             capability: .buildTool(),
             dependencies: [
-                .target(name: "swiftlint")
+                .target(name: "SwiftLintBinary")
             ]
         ),
         .plugin(
             name: "SwiftLintRun",
-            capability: .command(intent: .custom(verb: "swiftlint", description: "Run swiftlint lint --fix"), permissions: [
+            capability: .command(intent: .sourceCodeFormatting, permissions: [
                 .writeToPackageDirectory(reason: "Fixing SwiftLint issues")
             ]),
             dependencies: [
-                .target(name: "swiftlint")
+                .target(name: "SwiftLintBinary")
             ]
         ),
         .binaryTarget(
-            name: "swiftlint",
+            name: "SwiftLintBinary",
             url: "https://github.com/realm/SwiftLint/releases/download/0.59.1/SwiftLintBinary.artifactbundle.zip",
             checksum: "b9f915a58a818afcc66846740d272d5e73f37baf874e7809ff6f246ea98ad8a2"
         )
