@@ -26,7 +26,7 @@ let package = Package(
         ),
         .plugin(
             name: "SwiftLintRun",
-            capability: .command(intent: .sourceCodeFormatting, permissions: [
+            capability: .command(intent: .sourceCodeFormatting(), permissions: [
                 .writeToPackageDirectory(reason: "Fixing SwiftLint issues")
             ]),
             dependencies: [
