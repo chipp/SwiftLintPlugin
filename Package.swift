@@ -26,12 +26,9 @@ let package = Package(
         ),
         .plugin(
             name: "SwiftLintRun",
-            capability: .command(
-                intent: .custom(verb: "swiftlint", description: "Run swiftlint"),
-                permissions: [
-                    .writeToPackageDirectory(reason: "Fixing SwiftLint issues")
-                ]
-            ),
+            capability: .command(intent: .custom(verb: "swiftlint", description: "Run swiftlint"), permissions: [
+                .writeToPackageDirectory(reason: "Fixing SwiftLint issues")
+            ]),
             dependencies: [
                 .target(name: "SwiftLintBinary")
             ]
